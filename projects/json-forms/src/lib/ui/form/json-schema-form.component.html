@@ -1,0 +1,25 @@
+<form class="example-form" [formGroup]="form">
+    <mat-horizontal-stepper>
+        <ng-container *ngFor="let step of visibleSteps; let last = last;">
+            <mat-step>
+        
+                <ng-template matStepLabel>{{step.name}} [{{step.controls.length}} questions]</ng-template>
+
+                <json-schema-form-control [controls]="step.controls" [form]="form"></json-schema-form-control>
+                
+                <div>
+                    <button mat-raised-button matStepperPrevious (click)="onClickBack()">Back</button>
+                    &nbsp;
+                    <button mat-raised-button color="primary" *ngIf="!last" (click)="onClickNext()" matStepperNext [disabled]="!stepIsValid(step)">Next</button>
+                    &nbsp;
+                    <button mat-raised-button color="primary" *ngIf="last" (click)="onClickSubmit()" [disabled]="!stepIsValid(step)">Submit</button>
+                </div>
+        
+            </mat-step>
+        </ng-container>
+    </mat-horizontal-stepper>
+</form>
+
+<pre>
+    {{ form.value | json }}
+</pre>

@@ -1,0 +1,5 @@
+<ng-container *ngFor="let name of controls">
+    <json-schema-question [name]="name" [form]="form" *ngIf="isFormControl(name)"></json-schema-question>
+    <json-schema-question-group [name]="name" [form]="form.controls[name]" *ngIf="isFormGroup(name)"></json-schema-question-group>
+    <json-schema-question-set [name]="name" [form]="form.controls[name]" *ngIf="isFormArray(name)"></json-schema-question-set>
+</ng-container>

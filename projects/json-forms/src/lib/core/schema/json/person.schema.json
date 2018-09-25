@@ -1,0 +1,51 @@
+{
+    "$id": "https://example.com/person.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "",
+    "type": "object",
+    "properties": {
+      "firstName": {
+        "type": "string",
+        "maxLength": 5
+      },
+      "lastName": {
+        "type": "string"
+      },
+      "age": {
+        "type": "number",
+        "minimum": 16,
+        "maximum": 90
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "type": "string",
+              "maxLength": 5
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "age": {
+              "type": "number",
+              "minimum": 16,
+              "maximum": 90
+            }
+          },
+          "required": ["firstName"]
+        }
+      },
+      "address": {
+        "type": "object",
+        "properties": {
+            "street_address": { "type": "string" },
+            "city":           { "type": "string" },
+            "state":          { "type": "string" }
+          },
+          "required": ["street_address", "city", "state"]
+      }
+    },
+    "required": [ "firstName", "lastName" ]
+  }

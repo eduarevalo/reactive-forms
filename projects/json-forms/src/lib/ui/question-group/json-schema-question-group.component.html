@@ -1,0 +1,7 @@
+<mat-card>
+    <mat-card-content>
+        <ng-container *ngFor="let name of controlNames">
+            <json-schema-question [name]="name" [form]="form"></json-schema-question>
+        </ng-container>
+    </mat-card-content>
+</mat-card>

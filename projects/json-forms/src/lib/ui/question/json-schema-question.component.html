@@ -1,0 +1,6 @@
+<mat-form-field class="example-full-width">
+    <input matInput [type]="formControl.options.inputType" [placeholder]="name" [formControl]="formControl">
+    <mat-error *ngFor="let error of getKeys(formControl.errors)">
+        {{ error }}
+    </mat-error>
+</mat-form-field>
