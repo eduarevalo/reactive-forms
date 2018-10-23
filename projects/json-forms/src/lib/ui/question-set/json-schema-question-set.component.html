@@ -1,6 +1,9 @@
 <mat-card>
     <mat-card-header>
         <h2>{{ name }}</h2>
+        <mat-error *ngFor="let error of getKeys(form.errors)">
+            {{ error }}
+        </mat-error>
     </mat-card-header>
     <mat-card-content>
         <json-schema-form-control [controls]="controls" [form]="form"></json-schema-form-control>

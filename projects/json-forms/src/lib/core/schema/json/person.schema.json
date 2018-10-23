@@ -16,6 +16,9 @@
         "minimum": 16,
         "maximum": 90
       },
+      "employeeId": {
+        "type": "string"
+      },
       "children": {
         "type": "array",
         "items": {
@@ -32,10 +35,18 @@
               "type": "number",
               "minimum": 16,
               "maximum": 90
+            },
+            "birthday": {
+              "type": "string"
+            },
+            "valeurX": {
+              "type": "string"
             }
           },
           "required": ["firstName"]
-        }
+        },
+        "minItems": 1,
+        "maxItems": 2
       },
       "address": {
         "type": "object",

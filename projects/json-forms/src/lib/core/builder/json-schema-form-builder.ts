@@ -8,9 +8,11 @@ import { FormGroupOptions, FormArrayOptions, FormControlOptions } from '../forms
 
 const VALIDATORS_MAPPING = {
     required: (property, name, parentSchema): ValidatorFn => parentSchema.required && parentSchema.required.find( reqProp => name === reqProp ) ? Validators.required : null,
-    maximum: (property): ValidatorFn => property.maximum ? Validators.max(property.maximum) : null,
-    minimum: (property): ValidatorFn => property.minimum ? Validators.min(property.minimum) : null,
-    maxLength: (property): ValidatorFn => property.maxLength ? Validators.maxLength(property.maxLength) : null
+    maximum: (property): ValidatorFn => property.maximum != undefined ? Validators.max(property.maximum) : null,
+    minimum: (property): ValidatorFn => property.minimum != undefined ? Validators.min(property.minimum) : null,
+    maxLength: (property): ValidatorFn => property.maxLength != undefined ? Validators.maxLength(property.maxLength) : null,
+    minItems: (property): ValidatorFn => property.minItems != undefined ? Validators.minLength(property.minItems) : null,
+    maxItems: (property): ValidatorFn => property.maxItems != undefined ? Validators.maxLength(property.maxItems) : null,
 }
 
 export class JsonSchemaFormBuilder {
@@ -49,7 +51,13 @@ export class JsonSchemaFormBuilder {
         const options: FormArrayOptions = {
             newItem: () => this._build(schema.items, name, schema)
         };
-        return new FormArrayExtended<T>([], null, null, options);
+
+        const validators = Object
+            .values(VALIDATORS_MAPPING)
+            .map( validator => validator(schema, name, parentSchema))
+            .filter( validator => validator );
+
+        return new FormArrayExtended<T>([], validators, null, options);
     }
 
     static buildControl<T>(schema, name, parentSchema?): FormControlExtended<any> {

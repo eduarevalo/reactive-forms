@@ -19,4 +19,8 @@ export class JsonSchemaQuestionSetComponent {
         this.form.push(this.form.options.newItem());
     }
 
+    getKeys(data){
+        return data ? Object.keys(data) : [];
+    }
+
 }
