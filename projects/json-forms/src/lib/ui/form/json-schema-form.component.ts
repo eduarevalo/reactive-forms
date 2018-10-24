@@ -23,7 +23,7 @@ export class JsonSchemaFormComponent implements OnInit {
     index = 0;
 
     ngOnInit(){
-        this.form = JsonSchemaFormBuilder.build<any>(this.schemaId);
+        this.form = <FormGroupExtended<any>>JsonSchemaFormBuilder.build<any>(this.schemaId);
         if (this.data) {
             this.form.setValue(this.data);
         }

@@ -4,7 +4,7 @@ import { FormControlExtended } from '../forms/form-control-extended';
 import { FormArrayExtended } from '../forms/form-array-extended';
 import { FormGroupExtended } from '../forms/form-group-extended';
 import { JsonSchema } from '../schema/json-schema';
-import { FormGroupOptions, FormArrayOptions, FormControlOptions } from '../forms/form.models';
+import { FormArrayExtendedOptions } from '../forms/form.models';
 
 const VALIDATORS_MAPPING = {
     required: (property, name, parentSchema): ValidatorFn => parentSchema.required && parentSchema.required.find( reqProp => name === reqProp ) ? Validators.required : null,
@@ -17,13 +17,13 @@ const VALIDATORS_MAPPING = {
 
 export class JsonSchemaFormBuilder {
 
-    static build<T>(schemaId: string): FormGroupExtended<T> {
+    static build<T>(schemaId: string): FormGroupExtended<T> | FormArrayExtended<T> | FormControlExtended<T> {
         const parser = new JsonSchema();
         const schema = parser.getSchema(schemaId);
-        return this.buildGroup<T>(schema, schemaId);
+        return this._build<T>(schema, schemaId);
     }
 
-    private static _build<T>(schema, name, parentSchema?): FormGroupExtended<T> | FormArrayExtended<T> | FormControlExtended<T>{
+    private static _build<T>(schema, name, parentSchema?): FormGroupExtended<T> | FormArrayExtended<T> | FormControlExtended<T> {
         switch (schema.type) {
             case "object":
                 return this.buildGroup<T>(schema, name, parentSchema);
@@ -35,7 +35,6 @@ export class JsonSchemaFormBuilder {
     }
 
     static buildGroup<T>(schema, name, parentSchema?): FormGroupExtended<T> {
-        const options: FormGroupOptions = {};
 
         const controls = Object
             .keys(schema.properties)
@@ -44,41 +43,38 @@ export class JsonSchemaFormBuilder {
                 return controls;
             }, {});
 
-        return new FormGroupExtended<T>(controls, null, null, options);
+        return new FormGroupExtended<T>(controls);
     }
 
     static buildArray<T>(schema, name, parentSchema?): FormArrayExtended<T> {
-        const options: FormArrayOptions = {
-            newItem: () => this._build(schema.items, name, schema)
-        };
-
+        
         const validators = Object
             .values(VALIDATORS_MAPPING)
             .map( validator => validator(schema, name, parentSchema))
             .filter( validator => validator );
-
-        return new FormArrayExtended<T>([], validators, null, options);
+        
+        const options: FormArrayExtendedOptions = {
+                validators,
+                newItem: () => this._build(schema.items, name, schema)      
+            }
+        return new FormArrayExtended<T>([], options);
     }
 
     static buildControl<T>(schema, name, parentSchema?): FormControlExtended<any> {
 
-        const type = schema.type;
-        const options: FormControlOptions = {
-            inputType: type === 'number'
-                ? 'number'
-                : 'text'
-        };
-
         const validators = Object
             .values(VALIDATORS_MAPPING)
             .map( validator => validator(schema, name, parentSchema))
             .filter( validator => validator );
 
-        return type === "number"
-            ? new FormControlExtended<Number>(Number, validators, null, options)
-            : type === "boolean"
-            ? new FormControlExtended<Boolean>(Boolean, validators, null, options)
-            : new FormControlExtended<String>(String, validators, null, options);
+        switch(schema.type) {
+            case 'number':
+                return new FormControlExtended<Number>(null, { validators, type: Number });
+            case 'boolean':
+                return new FormControlExtended<Boolean>(null, { validators, type: Boolean });
+            default:
+                return new FormControlExtended<String>(null, { validators, type: String }); 
+        }
     }
 
 }

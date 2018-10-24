@@ -1,20 +1,18 @@
-import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray } from '@angular/forms';
 
-import { FormArrayOptions } from './form.models';
+import { FormArrayExtendedOptions } from './form.models';
 
 export class FormArrayExtended<T> extends FormArray {
     
     value: T;
-    options: FormArrayOptions;
+    options: FormArrayExtendedOptions;
 
     constructor(
         public controls: AbstractControl[],
-        validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
-        asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null,
-        formArrayOptions?: FormArrayOptions
+        validatorOrOpts?: FormArrayExtendedOptions
     ) {
-      super(controls, validatorOrOpts, asyncValidator);
-      this.options = formArrayOptions;
+      super(controls, validatorOrOpts);
+      this.options = validatorOrOpts;
     }
 
 }

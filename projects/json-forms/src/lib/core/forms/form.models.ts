@@ -1,11 +1,16 @@
-export interface FormControlOptions {
-    inputType: 'number' | 'text' | 'email' | 'tel'
+import { AbstractControlOptions } from '@angular/forms';
+
+export interface AbstractControlExtendedOptions extends AbstractControlOptions {
 }
 
-export interface FormArrayOptions {
+export interface FormControlExtendedOptions extends AbstractControlOptions {
+    type: any;
+}
+
+export interface FormArrayExtendedOptions extends AbstractControlExtendedOptions {
     newItem: Function
 }
 
-export interface FormGroupOptions {
+export interface FormGroupExtendedOptions extends AbstractControlExtendedOptions {
 
 }

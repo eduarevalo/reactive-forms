@@ -1,19 +1,17 @@
 import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormGroup, ValidatorFn } from '@angular/forms';
-import { FormGroupOptions } from './form.models';
+import { FormGroupExtendedOptions } from './form.models';
 
 export class FormGroupExtended<T> extends FormGroup {
     
     value: T;
-    options: FormGroupOptions;
+    options: FormGroupExtendedOptions;
     
     constructor(
         public controls: {[key: string]: AbstractControl},
-        validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
-        asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null,
-        formGroupOptions?: FormGroupOptions | null
+        validatorOrOpts?: FormGroupExtendedOptions
     ) {
-      super(controls, validatorOrOpts, asyncValidator);
-      this.options = formGroupOptions;
+      super(controls, validatorOrOpts);
+      this.options = validatorOrOpts;
     }
 
 }

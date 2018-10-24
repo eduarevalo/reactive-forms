@@ -1,19 +1,17 @@
-import { AbstractControlOptions, AsyncValidatorFn, FormControl, ValidatorFn } from '@angular/forms';
-import { FormControlOptions } from './form.models';
+import { FormControl } from '@angular/forms';
+import { FormControlExtendedOptions } from './form.models';
 
 export class FormControlExtended<T> extends FormControl {
 
     value: T;
-    options: FormControlOptions;
+    options: FormControlExtendedOptions;
 
     constructor(
-        private type,
-        validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
-        asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null,
-        formControlOptions?: FormControlOptions | null
+        formState: any = null,
+        validatorOrOpts?: FormControlExtendedOptions
     ) {
-        super(undefined, validatorOrOpts, asyncValidator);
-        this.options = formControlOptions;
+        super(formState, validatorOrOpts);
+        this.options = validatorOrOpts;
     }
 
     setValue(value: any, options: {
@@ -22,9 +20,9 @@ export class FormControlExtended<T> extends FormControl {
         emitModelToViewChange?: boolean,
         emitViewToModelChange?: boolean
     } = {}): void {
-        if (this.type === Boolean) {
+        if (this.options.type === Boolean) {
             return super.setValue(value != null ? Boolean(value) : undefined, options);
-        } else if (this.type === Number) {
+        } else if (this.options.type === Number) {
             return super.setValue(value ? Number(value) : undefined, options);
         }
         return super.setValue(value ? value : undefined, options);
